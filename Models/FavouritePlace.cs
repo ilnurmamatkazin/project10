@@ -16,8 +16,8 @@ namespace project10.Models
         [JsonProperty("about")]
         public string About { get; set; }
 
-        [JsonProperty("geom")]
-        public int Point { get; set; }
+        [JsonProperty("geometry")]
+        public GeoPoint Point { get; set; }
 
         // public FavouritePlace()
         // {
@@ -25,5 +25,14 @@ namespace project10.Models
         //     this.Point = new Point(position);
         // }
 
+    }
+
+    public class GeoPoint
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("coordinates")]
+        public float[] Coordinates { get; set; }
     }
 }

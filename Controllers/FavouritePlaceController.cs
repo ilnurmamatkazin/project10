@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using project10.Models;
 using project10.Repositories;
-using Newtonsoft.Json;
+// using Newtonsoft.Json;
+using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
@@ -24,9 +25,20 @@ namespace project10.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] FavouritePlace fp)
         {
+            Console.WriteLine("#####");
+
+            var serializeOptions = new JsonSerializerOptions
+{
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    WriteIndented = true
+};
+
+            Console.WriteLine(JsonSerializer.Serialize(fp.Point, serializeOptions));
+
+
             try
             {
-                _fpRepository.Create(fp);
+                //_fpRepository.Create(fp);
 
                 return StatusCode(201, null);
             }

@@ -24,7 +24,8 @@ namespace project10.Repositories
 
        public void Create(FavouritePlace fp)
         {
-            var query = "insert into public.favouriteplaces (name, about, geom) values (@p1, @p2, @p3)";
+            var query = "insert into public.temp (name, about, geom) values (@p1, @p2, ST_SetSRID(ST_GeomFromGeoJSON(@p3),4326))";
+            // var query = "insert into public.favouriteplaces (name, about, geom) values (@p1, @p2, @p3)";
             
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
