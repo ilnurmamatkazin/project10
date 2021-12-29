@@ -8,16 +8,16 @@ namespace project10.Models
     public class FavouritePlace
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public int id { get; set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string name { get; set; }
 
         [JsonProperty("about")]
-        public string About { get; set; }
+        public string about { get; set; }
 
         [JsonProperty("geometry")]
-        public GeoPoint Point { get; set; }
+        public GeoPoint point { get; set; }
 
         // public FavouritePlace()
         // {
@@ -30,9 +30,9 @@ namespace project10.Models
     public class GeoPoint
     {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string type { get; set; }
 
         [JsonProperty("coordinates")]
-        public float[] Coordinates { get; set; }
+        public float[] coordinates { get; set; }
     }
 }

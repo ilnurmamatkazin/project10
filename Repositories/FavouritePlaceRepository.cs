@@ -2,11 +2,8 @@
 using System;
 using Newtonsoft.Json.Linq;
 using project10.Models;
-using System.IO;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
 using Npgsql;
+using System.Text.Json;
 
 namespace project10.Repositories
 {
@@ -24,14 +21,22 @@ namespace project10.Repositories
 
        public void Create(FavouritePlace fp)
         {
-            var query = "insert into public.temp (name, about, geom) values (@p1, @p2, ST_SetSRID(ST_GeomFromGeoJSON(@p3),4326))";
-            // var query = "insert into public.favouriteplaces (name, about, geom) values (@p1, @p2, @p3)";
+            // var serializeOptions = new JsonSerializerOptions
+            // {
+            //     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            //     // WriteIndented = true
+            // };
+
+            var geoJson = JsonSerializer.Serialize(fp.point);
+            Console.WriteLine(geoJson);
+
+            var query = "insert into public.favouriteplaces (name, about, geom) values (@p1, @p2, ST_SetSRID(ST_GeomFromGeoJSON(@p3),4326))";
             
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
-                cmd.Parameters.AddWithValue("p1", fp.Name);
-                cmd.Parameters.AddWithValue("p2", fp.About);
-                cmd.Parameters.AddWithValue("p3", fp.Point);
+                cmd.Parameters.AddWithValue("p1", fp.name);
+                cmd.Parameters.AddWithValue("p2", fp.about);
+                cmd.Parameters.AddWithValue("p3", geoJson);
                 cmd.ExecuteNonQuery();
                 
             }
@@ -40,17 +45,24 @@ namespace project10.Repositories
 
         public void Update(int id, FavouritePlace fp)
         { 
-            
+            // var serializeOptions = new JsonSerializerOptions
+            // {
+            //     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            //     // WriteIndented = true
+            // };
+
+            var geoJson = JsonSerializer.Serialize(fp.point);
+
             var query = @"update public.favouriteplaces
-             set name=@p2, about=@p3
+             set name=@p2, about=@p3, geom=ST_SetSRID(ST_GeomFromGeoJSON(@p4),4326) 
              where id=@p1";
 
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
                 cmd.Parameters.AddWithValue("p1", id);
-                cmd.Parameters.AddWithValue("p2", fp.Name);
-                cmd.Parameters.AddWithValue("p3", fp.About);
-                //cmd.Parameters.AddWithValue("p4", fp.Point);
+                cmd.Parameters.AddWithValue("p2", fp.name);
+                cmd.Parameters.AddWithValue("p3", fp.about);
+                cmd.Parameters.AddWithValue("p4", geoJson);
                 cmd.ExecuteNonQuery();              
             }
         }
@@ -59,7 +71,14 @@ namespace project10.Repositories
         {
             JArray result = new JArray();
 
-            var query = "select id, name, about from public.favouriteplaces";
+            // var serializeOptions = new JsonSerializerOptions
+            // {
+            //     PropertyNamingPolicy = null,
+            //     // WriteIndented = true
+            // };
+
+            var query = "select id, name, about, ST_AsGeoJSON(geom) from public.favouriteplaces";
+            // var query = "select id, name, about, ST_AsGeoJSON(geom) from public.favouriteplaces";
 
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
@@ -69,14 +88,26 @@ namespace project10.Repositories
                 {
                     FavouritePlace tr = new FavouritePlace();
 
-                    tr.Id = reader.GetInt32(0);
-                    tr.Name = reader.GetString(1);
-                    tr.About = reader.GetString(2);
+                    tr.id = reader.GetInt32(0);
+                    tr.name = reader.GetString(1);
+                    tr.about = reader.GetString(2);
+                    
+           
+                    tr.point = JsonSerializer.Deserialize<GeoPoint>(reader.GetString(3));
+                    // Console.WriteLine(JsonSerializer.Serialize(tr.Point));
+
+                    // var q = @"{""Type"":""Point"",""Coordinates"":[37.617188,55.764214]}";
+                    // var w = JsonSerializer.Deserialize<GeoPoint>(q);
+                    // Console.WriteLine(JsonSerializer.Serialize(w));
+
+
                     result.Add((JObject)JToken.FromObject(tr));
                 }
 
                 reader.Close();
             }
+            Console.WriteLine(result);
+
             return result;
         }
 
@@ -86,7 +117,7 @@ namespace project10.Repositories
 
             JArray result = new JArray();
 
-            var query = "select id, name, about from public.favouriteplaces where id=@p1";
+            var query = "select id, name, about, ST_AsGeoJSON(geom) from public.favouriteplaces where id=@p1";
 
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
@@ -98,9 +129,11 @@ namespace project10.Repositories
                 {
                     FavouritePlace tr = new FavouritePlace();
 
-                        tr.Id = reader.GetInt32(0);
-                        tr.Name = reader.GetString(1);
-                        tr.About = reader.GetString(2);
+                        tr.id = reader.GetInt32(0);
+                        tr.name = reader.GetString(1);
+                        tr.about = reader.GetString(2);
+                        tr.point = JsonSerializer.Deserialize<GeoPoint>(reader.GetString(3));
+
                         result.Add((JObject)JToken.FromObject(tr));
                     
                 }
