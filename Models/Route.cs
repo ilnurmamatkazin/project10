@@ -15,25 +15,27 @@ namespace project10.Models
         [JsonProperty("name")]
         public string Name {get; set;}
 
-        [JsonProperty("trips")]
-        public List<Trip> Trips {get;}
-        
-        [JsonProperty("points")]
-        public List<Point> Points{get; set;}
-
-            [JsonProperty("color")]
+        [JsonProperty("about")]
+        public string About {get; set;}
+        [JsonProperty("color")]
         public string Color {get; set;}
-        
+        [JsonProperty("geometry")]
+        public GeoLineString geometry { get; set; }
+       
+        public class GeoLineString
+        {
+            [JsonProperty("type")]
+            public string type { get; set; }
 
-        
-        [JsonProperty("icon")]
-        public string Icon {get; set;}
-
-
-        public Route(){
-            this.Trips = new List<Trip>();
-            this.Points = new List<Point>();
+            [JsonProperty("coordinates")]
+            public float[][] coordinates { get; set; }
         }
+        
+
+        // public Route(){
+        //     this.Trips = new List<Trip>();
+        //     this.Points = new List<Point>();
+        // }
        
     }
 }

@@ -27,13 +27,14 @@ namespace project10.Repositories
 
             JArray result = new JArray();
 
-            var query = "select id, name from public.routes where typeroutes_id=@p1";
+            var query = "select id, name from public.routes";
+            // var query = "select id, name from public.routes where typeroutes_id=@p1";
 
 
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
 
-                cmd.Parameters.AddWithValue("p1", typeroutes_id);
+                // cmd.Parameters.AddWithValue("p1", typeroutes_id);
                 NpgsqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -84,23 +85,61 @@ namespace project10.Repositories
         }
 
 
-        public void Create(Route troutes)
+        public void Create(Route route)
         {
-            var query = "insert into public.routes (name, typeroutes_id, color, icon) values (@p1, @p2, @p3, @p4)";
+            var query = "insert into public.routes (name, typeroutes_id, color, icon, about) values (@p1, @p2, @p3, @p4, @p5)";
             
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
                 
-                cmd.Parameters.AddWithValue("p1", troutes.Name);
-                cmd.Parameters.AddWithValue("p2", troutes.Typeroutes_id);
-                cmd.Parameters.AddWithValue("p3", troutes.Color);
-                cmd.Parameters.AddWithValue("p4", troutes.Icon);
+                cmd.Parameters.AddWithValue("p1", route.Name);
+                cmd.Parameters.AddWithValue("p2", route.Typeroutes_id);
+                cmd.Parameters.AddWithValue("p3", route.Color);
+                cmd.Parameters.AddWithValue("p4", "route.Icon");
+                cmd.Parameters.AddWithValue("p5", route.About);
+                 // cmd.Parameters.AddWithValue("p6", route.Geom);
                 cmd.ExecuteNonQuery();
                 
             }
         }
 
-    
+        public void Update(int id, Route route)
+        { 
+            
+            var query = @"update public.routes
+             set typeroutes_id = @p2, name = @p3, about = @p4, color=@p5
+             where id=@p1";
+
+            using (var cmd = new NpgsqlCommand(query, this._connect))
+            {
+                cmd.Parameters.AddWithValue("p1", route.Id);
+                cmd.Parameters.AddWithValue("p2", route.Typeroutes_id);
+                cmd.Parameters.AddWithValue("p3", route.Name);
+                cmd.Parameters.AddWithValue("p4", route.About);
+                cmd.Parameters.AddWithValue("p5", route.Color);
+                //cmd.Parameters.AddWithValue("p4", route.Geom);
+                cmd.ExecuteNonQuery();              
+            }
+        }
+
+
+        //   public void Update(int id, Route route)
+        // { 
+            
+        //     var query = @"update public.routes
+        //      set name = @p2, typeroutes_id = @p3, color=@p4, icon = @p5
+        //      where id=@p1";
+
+        //     using (var cmd = new NpgsqlCommand(query, this._connect))
+        //     {
+        //         cmd.Parameters.AddWithValue("p1", route.Id);
+        //         cmd.Parameters.AddWithValue("p2", route.Name);
+        //         cmd.Parameters.AddWithValue("p3", route.Typeroutes_id);
+        //         cmd.Parameters.AddWithValue("p4", route.Color);
+        //         cmd.Parameters.AddWithValue("p5", "route.Icon");
+        //         cmd.ExecuteNonQuery();              
+        //     }
+        // }
 
          public void Delete(int id)
         {

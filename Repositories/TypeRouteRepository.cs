@@ -25,7 +25,7 @@ namespace project10.Repositories
         {
             JArray result = new JArray();
 
-            var query = "select id, name from public.typeroutes";
+            var query = "select id, name from public.typeroutes order by id ASC";
 
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
@@ -81,13 +81,14 @@ namespace project10.Repositories
 
         public void Create(TypeRoute tr)
         {
-            var query = "insert into public.typeroutes (name, color, icon) values (@p1, @p2, @p3)";
+            var query = "insert into public.typeroutes (name, color, icon, about) values (@p1, @p2, @p3, @p4)";
             
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
                 cmd.Parameters.AddWithValue("p1", tr.Name);
                 cmd.Parameters.AddWithValue("p2", tr.Color);
-                cmd.Parameters.AddWithValue("p3", tr.Icon);
+                cmd.Parameters.AddWithValue("p3", "tr.Icon");
+                cmd.Parameters.AddWithValue("p4", tr.About);
                 cmd.ExecuteNonQuery();
                 
             }
@@ -110,15 +111,16 @@ namespace project10.Repositories
         { 
             
             var query = @"update public.typeroutes
-             set name = @p2, about = @p3, point = @p4
+             set name = @p2, icon = @p3, color = @p4, about = @p5
              where id=@p1";
 
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
                 cmd.Parameters.AddWithValue("p1", tr.Id);
                 cmd.Parameters.AddWithValue("p2", tr.Name);
-                cmd.Parameters.AddWithValue("p3", tr.Icon);
+                cmd.Parameters.AddWithValue("p3", "tr.Icon");
                 cmd.Parameters.AddWithValue("p4", tr.Color);
+                cmd.Parameters.AddWithValue("p5", tr.About);
                 cmd.ExecuteNonQuery();              
             }
         }

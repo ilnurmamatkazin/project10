@@ -22,6 +22,8 @@ namespace project10
             //     .AddNewtonsoftJson (opt => 
             //         opt.SerializerSettings.ContractResolver = new DefaultContractResolver ());
 
+            services.AddCors();
+            // services.AddMvc();
             services.AddControllers().AddNewtonsoftJson();
 
             // services.AddSwaggerGen(c =>
@@ -40,12 +42,14 @@ namespace project10
                 // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "project10 v1"));
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            // app.UseAuthorization();
 
+            // app.UseMvc();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

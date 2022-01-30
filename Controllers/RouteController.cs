@@ -67,6 +67,21 @@ namespace project10.Controllers
             }
         }
 
+
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] Route r)
+        {
+            try
+            {
+                _routeRepository.Update(id, r); 
+                return StatusCode(204, null);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(500, err);
+            }
+        }
+
    
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)

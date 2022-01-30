@@ -69,11 +69,11 @@ namespace project10.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] FavouritePlace fp)
+        public IActionResult Update([FromBody] FavouritePlace fp)
         {
             try
             {
-                _fpRepository.Update(id, fp); 
+                _fpRepository.Update(fp); 
                 return StatusCode(204, null);
             }
             catch (Exception err)

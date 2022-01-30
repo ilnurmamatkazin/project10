@@ -43,7 +43,7 @@ namespace project10.Repositories
 
         }
 
-        public void Update(int id, FavouritePlace fp)
+        public void Update(FavouritePlace fp)
         { 
             // var serializeOptions = new JsonSerializerOptions
             // {
@@ -57,9 +57,10 @@ namespace project10.Repositories
              set name=@p2, about=@p3, geom=ST_SetSRID(ST_GeomFromGeoJSON(@p4),4326) 
              where id=@p1";
 
+
             using (var cmd = new NpgsqlCommand(query, this._connect))
             {
-                cmd.Parameters.AddWithValue("p1", id);
+                cmd.Parameters.AddWithValue("p1", fp.id);
                 cmd.Parameters.AddWithValue("p2", fp.name);
                 cmd.Parameters.AddWithValue("p3", fp.about);
                 cmd.Parameters.AddWithValue("p4", geoJson);

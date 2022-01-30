@@ -1,3 +1,4 @@
+// using Internal;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using project10.Models;
@@ -7,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+
 
 namespace project10.Controllers
 {
@@ -56,6 +58,8 @@ namespace project10.Controllers
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] TypeRoute tr)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(tr));
+            Console.WriteLine(id);
             try
             {
                 _typeRouteRepository.Update(id, tr); 

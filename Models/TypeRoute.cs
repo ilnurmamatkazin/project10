@@ -12,6 +12,8 @@ namespace project10.Models
 
         [JsonProperty("name")]
         public string Name {get; set;}
+        [JsonProperty("about")]
+        public string About {get; set;}
         
         [JsonProperty("color")]
         public string Color {get; set;}
