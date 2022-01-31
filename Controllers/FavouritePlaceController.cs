@@ -18,6 +18,20 @@ namespace project10.Controllers
             _fpRepository =  new Repositories.FavouritePlaceRepository(this.connect);
         }
 
+        /// <summary>
+        /// Избранные места.
+        /// </summary>
+        /// <remarks>
+        /// Данный метод реализует создание списка избранных мест
+        /// </remarks>
+        /// <param name="body"></param>
+        /// <returns>New Created Todo Item</returns>
+        /// <response code="201">Returns the newly created item</response>
+        /// <response code="500">If the item is incorrect</response>
+        /// [HttpPost]
+        [ProducesResponseType(typeof(FavouritePlace), 201)]
+        
+
         [HttpPost]
         public IActionResult Create([FromBody] FavouritePlace fp)
         {
@@ -25,7 +39,7 @@ namespace project10.Controllers
             {
                 _fpRepository.Create(fp);
 
-                return StatusCode(201, null);
+                return StatusCode(201, fp);
             }
             catch (Exception err)
             {
