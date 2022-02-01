@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using IGeekFan.AspNetCore.RapiDoc;
+using System.Collections.Generic;
 
 namespace project10
 {
@@ -36,7 +37,23 @@ namespace project10
 
       services.AddSwaggerGen(c =>
       {
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "API V1", Version = "v1" });
+        c.SwaggerDoc("v1", new OpenApiInfo { 
+          Version = "v1",
+          Title = "Walking in Moscow",
+          Description = "Проект учениц 10 класса: Маматказиной Арин и Александровой Марии. \n Создана геоинформационная система, которая сделает прогулки по Москве интереснее и увлекательнее.",
+          TermsOfService = new Uri("https://example.com/terms"),
+          Contact = new OpenApiContact
+          {
+            Name = "Shayne Boyer",
+            Email = string.Empty,
+            Url = new Uri("https://twitter.com/spboyer"),
+          },
+          License = new OpenApiLicense
+          {
+            Name = "Use under LICX",
+            Url = new Uri("https://example.com/license"),
+          }          
+        });
         var filePath = Path.Combine(System.AppContext.BaseDirectory, $"{typeof(Startup).Assembly.GetName().Name}.xml");
         c.IncludeXmlComments(filePath, true);
         c.EnableAnnotations();
@@ -97,14 +114,12 @@ namespace project10
       });
 
       //   // Enable middleware to serve generated Swagger as a JSON endpoint
-      //   app.UseSwagger();
-
-      //   // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-      //   app.UseSwaggerUI(c =>
-      //   {
-      //     c.SwaggerEndpoint("/swagger/v1/swagger.json", "project10 v1");
-      //     c.InjectStylesheet("/swagger-ui/custom.css");
-      //   });
+        // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+        // app.UseSwaggerUI(c =>
+        // {
+        //   // c.SwaggerEndpoint("/swagger/v1/swagger.json", "project10 v1");
+        //   // c.InjectStylesheet("/swagger-ui/custom.css");
+        // });
 
 
 
@@ -115,7 +130,7 @@ namespace project10
 
       app.UseRapiDocUI(c =>
       {
-        c.RoutePrefix = ""; // serve the UI at root
+        c.RoutePrefix = "swagger"; // serve the UI at root
         c.SwaggerEndpoint("/v1/api-docs", "V1 Docs");
         c.GenericRapiConfig = new GenericRapiConfig()
         {

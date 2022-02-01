@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "../../yandex/mesto"
+		},
+		{
+			"path": "../../../Downloads/3part"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../../yandex/mesto-react"
+		},
+		{
+			"path": "../../yandex/mesto-react1"
+		},
+		{
+			"path": "../../arina/poject10_front"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "3part"
+	}
+}
