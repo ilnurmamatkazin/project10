@@ -7,29 +7,22 @@ namespace project10.Models
     public class Route
     {
         [JsonProperty("id")]
-        public int Id {get; set;}
+        public int id {get; set;}
 
         [JsonProperty("typeroutes_id")]
-        public int Typeroutes_id {get; set;}
+        public int typeroutes_id {get; set;}
 
         [JsonProperty("name")]
-        public string Name {get; set;}
+        public string name {get; set;}
 
         [JsonProperty("about")]
-        public string About {get; set;}
+        public string about {get; set;}
         [JsonProperty("color")]
-        public string Color {get; set;}
+        public string color {get; set;}
         [JsonProperty("geometry")]
         public GeoLineString geometry { get; set; }
        
-        public class GeoLineString
-        {
-            [JsonProperty("type")]
-            public string type { get; set; }
-
-            [JsonProperty("coordinates")]
-            public float[][] coordinates { get; set; }
-        }
+        
         
 
         // public Route(){
@@ -38,4 +31,12 @@ namespace project10.Models
         // }
        
     }
+    public class GeoLineString
+        {
+            [JsonProperty("type")]
+            public string type { get; set; }
+
+            [JsonProperty("coordinates")]
+            public float[][] coordinates { get; set; }
+        }
 }

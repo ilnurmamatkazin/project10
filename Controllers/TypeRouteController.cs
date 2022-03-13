@@ -1,13 +1,17 @@
-// using Internal;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using project10.Models;
 using project10.Repositories;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using Swashbuckle.AspNetCore.Annotations;
 using Npgsql;
+using Microsoft.AspNetCore.Http;
+using NpgsqlTypes;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using System.Net.Mime;
+
 
 
 namespace project10.Controllers
@@ -23,6 +27,17 @@ namespace project10.Controllers
         }
 
         [HttpGet]
+         [SwaggerOperation(
+        Summary = "Получить список всех типов маршрутов",
+        Description = "Данный метод формирует список из json объектов с реквизитами всех типов маршрутов.",
+        Tags = new[] { "typeRoutes - типы маршрутов пользователя" }
+        )]
+        [Consumes( MediaTypeNames.Application.Json )]
+        // [ConsumesAttribute( "application/json", new string[] {"application/json"})]
+        // [SwaggerResponse(StatusCodes.Status201Created, typeof(api.Anomaly), Description = "Successfull operation", new string[] {"application/json"})]
+        [SwaggerResponseAttribute(StatusCodes.Status200OK, "Реквизиты списка", typeof(TypeRoute), new string[] {"application/json"})]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в строке запроса")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
         public IActionResult List()
         {
             try
@@ -39,6 +54,17 @@ namespace project10.Controllers
 
 
         [HttpPost]
+        [SwaggerOperation(
+        Summary = "Создать тип маршрута",
+        Description = "Данный метод реализует создание типа маршрута. Данные приходят в теле запроса.",
+        Tags = new[] { "typeRoutes - типы маршрутов пользователя" }
+        )]
+        [Consumes( MediaTypeNames.Application.Json )]
+        // [ConsumesAttribute( "application/json", new string[] {"application/json"})]
+        // [SwaggerResponse(StatusCodes.Status201Created, typeof(api.Anomaly), Description = "Successfull operation", new string[] {"application/json"})]
+        [SwaggerResponseAttribute(StatusCodes.Status201Created, "Новый маршрут сохранен в системе")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в теле запроса")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
         public IActionResult Create([FromBody] TypeRoute tr)
         {
             try
@@ -56,9 +82,20 @@ namespace project10.Controllers
 
 
         [HttpPut("{id}")]
+         [SwaggerOperation(
+        Summary = "Изменить выбранный тип маршрута",
+        Description = "Данный метод реализует изменение типа маршрута. Данные приходят в теле запроса.",
+        Tags = new[] { "typeRoutes - типы маршрутов пользователя" }
+        )]
+        [Consumes( MediaTypeNames.Application.Json )]
+        // [ConsumesAttribute( "application/json", new string[] {"application/json"})]
+        // [SwaggerResponse(StatusCodes.Status201Created, typeof(api.Anomaly), Description = "Successfull operation", new string[] {"application/json"})]
+        [SwaggerResponseAttribute(StatusCodes.Status204NoContent, "Тип маршрута обновлен в системе")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в теле запроса")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
         public IActionResult Update([FromRoute] int id, [FromBody] TypeRoute tr)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(tr));
+
             Console.WriteLine(id);
             try
             {
@@ -72,6 +109,17 @@ namespace project10.Controllers
         }
 
         [HttpGet("{id}")]
+         [SwaggerOperation(
+            Summary = "Получить реквизиты выбранного типа маршрута",
+            Description = "Данный метод формирует json объект с реквизитами выбранного типа маршрута.",
+            Tags = new[] { "typeRoutes - типы маршрутов пользователя" }
+        )]
+        [Consumes( MediaTypeNames.Application.Json )]
+        // [ConsumesAttribute( "application/json", new string[] {"application/json"})]
+        // [SwaggerResponse(StatusCodes.Status201Created, typeof(api.Anomaly), Description = "Successfull operation", new string[] {"application/json"})]
+        [SwaggerResponseAttribute(StatusCodes.Status200OK, "Реквизиты выбранного типа маршрута", typeof(TypeRoute), new string[] {"application/json"})]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в строке запроса")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
         public IActionResult Show([FromRoute] int id)
         {
             try
@@ -87,6 +135,18 @@ namespace project10.Controllers
 
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(
+        Summary = "Удалить выбранный тип маршрута",
+        Description = "Данный метод удаляет json объект с реквизитами выбранного типа маршрута.",
+        Tags = new[] { "typeRoutes - типы маршрутов пользователя" }
+        )]
+        [Consumes( MediaTypeNames.Application.Json )]
+        // [ConsumesAttribute( "application/json", new string[] {"application/json"})]
+        // [SwaggerResponse(StatusCodes.Status201Created, typeof(api.Anomaly), Description = "Successfull operation", new string[] {"application/json"})]
+        [SwaggerResponseAttribute(StatusCodes.Status200OK, "Реквизиты выбранного типа маршрута", typeof(TypeRoute), new string[] {"application/json"})]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в строке запроса")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
+
         public IActionResult Delete([FromRoute] int id)
         {
 

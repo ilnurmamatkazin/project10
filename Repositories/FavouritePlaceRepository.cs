@@ -9,7 +9,7 @@ namespace project10.Repositories
 {
     public class FavouritePlaceRepository
     {
-        static string favouritePlacePath = @"C:\ARINA\WORK\project10\data\favouriteplace.json";
+        //static string favouritePlacePath = @"C:\ARINA\WORK\project10\data\favouriteplace.json";
 
 
         private NpgsqlConnection _connect;
@@ -51,10 +51,10 @@ namespace project10.Repositories
             //     // WriteIndented = true
             // };
 
-            // var geoJson = JsonSerializer.Serialize(fp.point);
-//, geom=ST_SetSRID(ST_GeomFromGeoJSON(@p4),4326) 
+            var geoJson = JsonSerializer.Serialize(fp.point);
+
             var query = @"update public.favouriteplaces
-             set name=@p2, about=@p3
+             set name=@p2, about=@p3, geom=ST_SetSRID(ST_GeomFromGeoJSON(@p4),4326)
              where id=@p1";
 
 
@@ -63,7 +63,7 @@ namespace project10.Repositories
                 cmd.Parameters.AddWithValue("p1", fp.id);
                 cmd.Parameters.AddWithValue("p2", fp.name);
                 cmd.Parameters.AddWithValue("p3", fp.about);
-                // cmd.Parameters.AddWithValue("p4", geoJson);
+                cmd.Parameters.AddWithValue("p4", geoJson);
                 cmd.ExecuteNonQuery();              
             }
         }

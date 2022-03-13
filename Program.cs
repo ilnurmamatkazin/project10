@@ -21,6 +21,7 @@ namespace project10
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    //webBuilder.UseUrls("http://89.108.64.79:5000");
                 });
     }
 }

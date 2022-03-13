@@ -51,6 +51,17 @@ namespace project10.Controllers
     }
 
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Получить список избранных мест",
+        Description = "Данный метод формирует список из json объектов с реквизитами избранных мест.",
+        Tags = new[] { "favourites - избранные места пользователя" }
+    )]
+    [Consumes( MediaTypeNames.Application.Json )]
+    // [ConsumesAttribute( "application/json", new string[] {"application/json"})]
+    // [SwaggerResponse(StatusCodes.Status201Created, typeof(api.Anomaly), Description = "Successfull operation", new string[] {"application/json"})]
+    [SwaggerResponseAttribute(StatusCodes.Status200OK, "Реквизиты списка", typeof(FavouritePlace), new string[] {"application/json"})]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в строке запроса")]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
     public IActionResult List()
     {
       try
@@ -67,6 +78,17 @@ namespace project10.Controllers
 
 
     [HttpDelete("{id}")]
+    [SwaggerOperation(
+        Summary = "Удалить избранное место",
+        Description = "Данный метод удаляет json объект с реквизитами избранного места.",
+        Tags = new[] { "favourites - избранные места пользователя" }
+    )]
+    [Consumes( MediaTypeNames.Application.Json )]
+    // [ConsumesAttribute( "application/json", new string[] {"application/json"})]
+    // [SwaggerResponse(StatusCodes.Status201Created, typeof(api.Anomaly), Description = "Successfull operation", new string[] {"application/json"})]
+    [SwaggerResponseAttribute(StatusCodes.Status200OK, "Реквизиты избранного места", typeof(FavouritePlace), new string[] {"application/json"})]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в строке запроса")]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
     public IActionResult Delete([FromRoute] int id)
     {
 
@@ -85,7 +107,7 @@ namespace project10.Controllers
     }
 
 
-    [HttpPut()]
+    [HttpPut("{id}")]
     [SwaggerOperation(
         Summary = "Изменить избранное место",
         Description = "Данный метод реализует Изменение избранного места. Данные приходят в теле запроса.",
