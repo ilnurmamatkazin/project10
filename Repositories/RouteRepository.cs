@@ -77,9 +77,11 @@ namespace project10.Repositories
                     Route tr = new Route();
 
                     tr.id = reader.GetInt32(0);
+                    //Console.WriteLine(tr.id);
                     tr.name = reader.GetString(1);
                     tr.typeroutes_id = reader.GetInt32(2);
                     tr.color = reader.GetString(3);
+               
                     tr.about = reader.GetString(4);
                     // Console.WriteLine(reader.GetString(5));
                     tr.geometry = JsonSerializer.Deserialize<GeoLineString>(reader.GetString(5));
@@ -90,7 +92,7 @@ namespace project10.Repositories
                 reader.Close();
             }
 
-            Console.WriteLine(result);
+            //Console.WriteLine(result);
 
 
          return result;
@@ -117,7 +119,7 @@ namespace project10.Repositories
 
         public void Update(int id, Route route)
         { 
-            
+
             var query = @"update public.routes
              set typeroutes_id = @p2, name = @p3, about = @p4, color=@p5
              where id=@p1";
@@ -129,7 +131,6 @@ namespace project10.Repositories
                 cmd.Parameters.AddWithValue("p3", route.name);
                 cmd.Parameters.AddWithValue("p4", route.about);
                 cmd.Parameters.AddWithValue("p5", route.color);
-                //cmd.Parameters.AddWithValue("p4", route.Geom);
                 cmd.ExecuteNonQuery();              
             }
         }

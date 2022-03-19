@@ -106,7 +106,7 @@ namespace project10.Repositories
 
                 reader.Close();
             }
-            Console.WriteLine(result);
+            //Console.WriteLine(result);
 
             return result;
         }
