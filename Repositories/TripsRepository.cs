@@ -23,7 +23,7 @@ namespace project10.Repositories
 
       JArray result = new JArray();
 
-      var query = "select id, name, about, distance, kalories, time, ST_AsGeoJSON(geom), trips_date from public.trips";
+      var query = "select id, name, about, distance, kalories, time,  trips_date from public.trips";
 
       using (var cmd = new NpgsqlCommand(query, this._connect))
       {
@@ -40,7 +40,7 @@ namespace project10.Repositories
           tr.distance = reader.GetInt32(3);
           tr.kalories = reader.GetInt32(4);
           tr.time = reader.GetInt32(5);
-          tr.trips_date = DateTime.Parse(reader.GetString(6));
+          tr.trips_date = reader.GetDateTime(6);
 
           result.Add((JObject)JToken.FromObject(tr));
         }
@@ -99,7 +99,7 @@ namespace project10.Repositories
       Console.WriteLine(json);
 
       // var query = "insert into public.trips (name, about, distance, kalories, time, geom) values (@p1, @p2, @p3, @p4, @p5, @p6)";
-      var query = "insert into public.trips (name, about, distance, kalories, time, trips_date, geom) values (@p1, @p2, @p3, @p4, @p5, @p6, @p7)";
+      var query = "insert into public.trips (name, about, distance, kalories, time, trips_date, geom) values (@p1, @p2, @p3, @p4, @p5, @p6, ST_SetSRID(ST_GeomFromGeoJSON(@p7),4326))";
 
       using (var cmd = new NpgsqlCommand(query, this._connect))
       {
@@ -143,7 +143,7 @@ namespace project10.Repositories
     public void Delete(int id)
     {
 
-      var query = "delete from trips.routes where id = @p1";
+      var query = "delete from public.trips where id = @p1";
 
       using (var cmd = new NpgsqlCommand(query, this._connect))
       {
