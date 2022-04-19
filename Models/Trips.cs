@@ -11,6 +11,9 @@ namespace project10.Models
     [JsonProperty("id")]
     public int id { get; set; }
 
+    [JsonProperty("user_id")]
+    public int user_id { get; set; }
+
     [JsonProperty("name")]
     public string name { get; set; }
 
@@ -31,7 +34,6 @@ namespace project10.Models
 
     [JsonProperty("trips_date")]
     public DateTime trips_date { get; set; }
-
   }
   public class GeoLineStringTrips
   {

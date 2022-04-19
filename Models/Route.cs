@@ -19,6 +19,13 @@ namespace project10.Models
         public string about {get; set;}
         [JsonProperty("color")]
         public string color {get; set;}
+
+        [JsonProperty("distance")]
+        public int distance {get; set;}
+         [JsonProperty("time")]
+        public int time {get; set;}
+         [JsonProperty("level")]
+        public int level {get; set;}
         [JsonProperty("geometry")]
         public GeoLineString geometry { get; set; }
        

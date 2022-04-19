@@ -18,16 +18,19 @@ namespace project10.Repositories
     }
 
 
-    public JArray List()
+    public JArray List(int user_id, DateTime date)
     {
 
       JArray result = new JArray();
 
-      var query = "select id, name, about, distance, kalories, time,  trips_date from public.trips";
+      var query = "select id, name, about, distance, kalories, time,  trips_date from public.trips where user_id=@p1 and (-1=@p2 or date=@p3) ";
 
       using (var cmd = new NpgsqlCommand(query, this._connect))
       {
 
+        cmd.Parameters.AddWithValue("p1", user_id);
+        cmd.Parameters.AddWithValue("p2", date);
+        cmd.Parameters.AddWithValue("p3", date);
         NpgsqlDataReader reader = cmd.ExecuteReader();
 
         while (reader.Read())
@@ -44,18 +47,13 @@ namespace project10.Repositories
 
           result.Add((JObject)JToken.FromObject(tr));
         }
-
         reader.Close();
-
       }
-
       return result;
     }
 
-
     public JToken Show(int id)
     {
-
       JArray result = new JArray();
 
       var query = "select name, about, distance, kalories, time, ST_AsGeoJSON(geom), trips_date from from public.trips where id=@p1";
@@ -77,16 +75,12 @@ namespace project10.Repositories
           tr.kalories = reader.GetInt32(4);
           tr.time = reader.GetInt32(5);
           tr.trips_date = DateTime.Parse(reader.GetString(6));
-
-          // Console.WriteLine(reader.GetString(5));
           tr.geometry = JsonSerializer.Deserialize<GeoLineStringTrips>(reader.GetString(6));
           result.Add((JObject)JToken.FromObject(tr));
-
         }
         reader.Close();
       }
       return result;
-
     }
 
 
@@ -99,7 +93,7 @@ namespace project10.Repositories
       Console.WriteLine(json);
 
       // var query = "insert into public.trips (name, about, distance, kalories, time, geom) values (@p1, @p2, @p3, @p4, @p5, @p6)";
-      var query = "insert into public.trips (name, about, distance, kalories, time, trips_date, geom) values (@p1, @p2, @p3, @p4, @p5, @p6, ST_SetSRID(ST_GeomFromGeoJSON(@p7),4326))";
+      var query = "insert into public.trips (name, about, distance, kalories, time, trips_date, geom, user_id) values (@p1, @p2, @p3, @p4, @p5, @p6, ST_SetSRID(ST_GeomFromGeoJSON(@p7),4326), @p8)";
 
       using (var cmd = new NpgsqlCommand(query, this._connect))
       {
@@ -111,38 +105,33 @@ namespace project10.Repositories
         cmd.Parameters.AddWithValue("p5", trip.time);
         cmd.Parameters.AddWithValue("p6", trip.trips_date);
         cmd.Parameters.AddWithValue("p7", geoJson);
+        cmd.Parameters.AddWithValue("p8", trip.user_id);
 
-
-        // cmd.Parameters.AddWithValue("p6", route.Geom);
-        cmd.ExecuteNonQuery();
-
-      }
-    }
-
-    public void Update(int id, Trips trip)
-    {
-
-      var query = @"update public.trips
-             set name = @p2, about = @p3, distance = @p4, kalories=@p5, time = @p6
-             where id=@p1";
-
-      using (var cmd = new NpgsqlCommand(query, this._connect))
-      {
-        cmd.Parameters.AddWithValue("p1", trip.id);
-        cmd.Parameters.AddWithValue("p2", trip.name);
-        cmd.Parameters.AddWithValue("p3", trip.about);
-        cmd.Parameters.AddWithValue("p4", trip.distance);
-        cmd.Parameters.AddWithValue("p5", trip.kalories);
-        cmd.Parameters.AddWithValue("p6", trip.time);
         cmd.ExecuteNonQuery();
       }
     }
 
+    // public void Update(int id, Trips trip)
+    // {
 
+    //   var query = @"update public.trips
+    //          set name = @p2, about = @p3, distance = @p4, kalories=@p5, time = @p6
+    //          where id=@p1";
+
+    //   using (var cmd = new NpgsqlCommand(query, this._connect))
+    //   {
+    //     cmd.Parameters.AddWithValue("p1", trip.id);
+    //     cmd.Parameters.AddWithValue("p2", trip.name);
+    //     cmd.Parameters.AddWithValue("p3", trip.about);
+    //     cmd.Parameters.AddWithValue("p4", trip.distance);
+    //     cmd.Parameters.AddWithValue("p5", trip.kalories);
+    //     cmd.Parameters.AddWithValue("p6", trip.time);
+    //     cmd.ExecuteNonQuery();
+    //   }
+    // }
 
     public void Delete(int id)
     {
-
       var query = "delete from public.trips where id = @p1";
 
       using (var cmd = new NpgsqlCommand(query, this._connect))
@@ -150,11 +139,7 @@ namespace project10.Repositories
         cmd.Parameters.AddWithValue("p1", NpgsqlTypes.NpgsqlDbType.Integer, id);
         cmd.ExecuteNonQuery();
       }
-
     }
 
   }
-
-
-
 }

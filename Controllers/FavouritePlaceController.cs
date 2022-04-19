@@ -50,7 +50,7 @@ namespace project10.Controllers
       }
     }
 
-    [HttpGet]
+    [HttpGet()]
     [SwaggerOperation(
         Summary = "Получить список избранных мест",
         Description = "Данный метод формирует список из json объектов с реквизитами избранных мест.",
@@ -62,11 +62,11 @@ namespace project10.Controllers
     [SwaggerResponseAttribute(StatusCodes.Status200OK, "Реквизиты списка", typeof(FavouritePlace), new string[] {"application/json"})]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в строке запроса")]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
-    public IActionResult List()
+    public IActionResult List([FromQuery] int user_id)
     {
       try
       {
-        JArray tr = _fpRepository.List();
+        JArray tr = _fpRepository.List(user_id);
 
         return StatusCode(200, tr);
       }

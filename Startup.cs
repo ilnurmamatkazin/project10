@@ -40,7 +40,7 @@ namespace project10
         c.SwaggerDoc("v1", new OpenApiInfo { 
           Version = "v1",
           Title = "Walking in Moscow",
-          Description = "Проект учениц 10 класса: Маматказиной Арин и Александровой Марии. \n Создана геоинформационная система, которая сделает прогулки по Москве интереснее и увлекательнее.",
+          Description = "Проект учениц 10 класса: Маматказиной Арины и Александровой Марии. \n Создана геоинформационная система, которая сделает прогулки по Москве интереснее и увлекательнее.",
           TermsOfService = new Uri("https://example.com/terms"),
           Contact = new OpenApiContact
           {

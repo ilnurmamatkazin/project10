@@ -10,6 +10,9 @@ namespace project10.Models
         [JsonProperty("id")]
         public int id { get; set; }
 
+        [JsonProperty("user_id")]
+        public int user_id { get; set; }
+
         [JsonProperty("name")]
         public string name { get; set; }
 
@@ -18,15 +21,7 @@ namespace project10.Models
 
         [JsonProperty("geometry")]
         public GeoPoint point { get; set; }
-
-        // public FavouritePlace()
-        // {
-        //     Position position = new Position(51.899523, -2.124156);
-        //     this.Point = new Point(position);
-        // }
-
     }
-
     public class GeoPoint
     {
         [JsonProperty("type")]

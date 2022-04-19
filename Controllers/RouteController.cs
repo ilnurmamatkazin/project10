@@ -91,12 +91,12 @@ namespace project10.Controllers
         [SwaggerResponseAttribute(StatusCodes.Status200OK, "Реквизиты выбранного маршрута", typeof(Route), new string[] {"application/json"})]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в строке запроса")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
-        public IActionResult Show([FromRoute] int id)
+        public IActionResult Show([FromRoute] int id, [FromQuery] int distance, [FromQuery] int time, [FromQuery] int level)
         {
             Console.WriteLine(id);
             try
             {
-                JToken tr = _routeRepository.Show(id);
+                JToken tr = _routeRepository.Show(id, distance, time,  level);
                 return StatusCode(200, tr);
             }
             catch (Exception err)
