@@ -34,12 +34,17 @@ namespace project10.Controllers
     [SwaggerResponseAttribute(StatusCodes.Status200OK, "Реквизиты списка", typeof(TypeRoute), new string[] { "application/json" })]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в строке запроса")]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
-    public IActionResult List([FromQuery] int user_id, [FromQuery] DateTime dates)
+    public IActionResult List([FromQuery] int user_id, [FromQuery] DateTime date)
     {
+      Console.WriteLine(date);
       try
       {
-        DateTime date = dates.Date;
+        // DateTime dateFilter = date.Date;
+        // Console.WriteLine(dateFilter);
         JArray tr = _tripsRepository.List(user_id, date);
+
+      Console.WriteLine(tr);
+
 
         return StatusCode(200, tr);
       }

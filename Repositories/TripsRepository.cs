@@ -7,6 +7,7 @@ using Npgsql;
 using System.Text.Json;
 
 
+
 namespace project10.Repositories
 {
   public class TripsRepository
@@ -21,16 +22,16 @@ namespace project10.Repositories
     public JArray List(int user_id, DateTime date)
     {
 
+      Console.WriteLine(user_id);
+
       JArray result = new JArray();
 
-      var query = "select id, name, about, distance, kalories, time,  trips_date from public.trips where user_id=@p1 and (-1=@p2 or date=@p3) ";
+      var query = "select id, name, about, distance, kalories, time, trips_date, ST_AsGeoJSON(geom) from public.trips where user_id=@p1 and trips_date=@p2";
 
       using (var cmd = new NpgsqlCommand(query, this._connect))
       {
-
         cmd.Parameters.AddWithValue("p1", user_id);
         cmd.Parameters.AddWithValue("p2", date);
-        cmd.Parameters.AddWithValue("p3", date);
         NpgsqlDataReader reader = cmd.ExecuteReader();
 
         while (reader.Read())
@@ -44,6 +45,9 @@ namespace project10.Repositories
           tr.kalories = reader.GetInt32(4);
           tr.time = reader.GetInt32(5);
           tr.trips_date = reader.GetDateTime(6);
+          tr.geometry = JsonSerializer.Deserialize<GeoLineStringTrips>(reader.GetString(7));
+
+          Console.WriteLine(tr);
 
           result.Add((JObject)JToken.FromObject(tr));
         }
