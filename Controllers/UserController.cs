@@ -22,7 +22,7 @@ namespace project10.Controllers
         private UserRepository _userRepository;
         public UserController(IConfiguration configuration) : base(configuration)
         {
-            _userRepository = new Repositories.UserRepository(this.connect);;
+            _userRepository = new Repositories.UserRepository(this.strConnect);;
         }
 
 
