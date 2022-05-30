@@ -14,11 +14,11 @@ namespace project10.Repositories
     public class TypeRouteRepository
     {
         
-        private NpgsqlConnection _connect;
+        private string strConnect;
         
-        public TypeRouteRepository(NpgsqlConnection connect)
+        public TypeRouteRepository(string strConnect)
         {
-            this._connect = connect;
+            this.strConnect = strConnect;
         }
         
         public JArray List()

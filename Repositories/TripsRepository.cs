@@ -12,10 +12,10 @@ namespace project10.Repositories
 {
   public class TripsRepository
   {
-    private NpgsqlConnection _connect;
-    public TripsRepository(NpgsqlConnection connect)
+    private string strConnect;
+    public TripsRepository(string strConnect)
     {
-      this._connect = connect;
+      this.strConnect = strConnect;
     }
 
 
