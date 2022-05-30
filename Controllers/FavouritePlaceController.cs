@@ -31,8 +31,6 @@ namespace project10.Controllers
         Tags = new[] { "favourites - избранные места пользователя" }
     )]
     [Consumes( MediaTypeNames.Application.Json )]
-    // [ConsumesAttribute( "application/json", new string[] {"application/json"})]
-    // [SwaggerResponse(StatusCodes.Status201Created, typeof(api.Anomaly), Description = "Successfull operation", new string[] {"application/json"})]
     [SwaggerResponseAttribute(StatusCodes.Status201Created, "Новое избранное место сохранено в системе")]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Ошибка в теле запроса")]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]

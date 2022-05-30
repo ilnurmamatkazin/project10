@@ -22,7 +22,7 @@ namespace project10.Controllers
         private RouteRepository _routeRepository;
         public RouteController(IConfiguration configuration) : base(configuration)
         {
-            _routeRepository = new Repositories.RouteRepository(this.connect);;
+            _routeRepository = new Repositories.RouteRepository(this.connect);
         }
 
 
@@ -68,6 +68,7 @@ namespace project10.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Ошибка выполнения метода")]
         public IActionResult List()
         {
+            Console.WriteLine("####################");
             try
             {
                 JArray tr = _routeRepository.List();

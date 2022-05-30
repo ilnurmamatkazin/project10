@@ -64,6 +64,8 @@ namespace project10.Repositories
         {
             JArray result = new JArray();
 
+            Console.WriteLine($"{distance}, {time}, {level}");
+
             var query = "select id, name, typeroutes_id, color, about, ST_AsGeoJSON(geom), distance, time, level from public.routes where typeroutes_id=@p1 and (-1=@p2 or distance=@p3) and (-1=@p4 or time=@p5) and (-1=@p6 or level=@p7)";
 
             using (var cmd = new NpgsqlCommand(query, this._connect))
@@ -88,6 +90,7 @@ namespace project10.Repositories
                     tr.color = reader.GetString(3);             
                     tr.about = reader.GetString(4);
                     tr.geometry = JsonSerializer.Deserialize<GeoLineString>(reader.GetString(5));
+                    Console.WriteLine(tr.geometry);
                     tr.distance = reader.GetInt32(6);
                     tr.time = reader.GetInt32(7);
                     tr.level = reader.GetInt32(8);

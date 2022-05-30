@@ -28,22 +28,13 @@ namespace project10.Models
         public int level {get; set;}
         [JsonProperty("geometry")]
         public GeoLineString geometry { get; set; }
-       
-        
-        
-
-        // public Route(){
-        //     this.Trips = new List<Trip>();
-        //     this.Points = new List<Point>();
-        // }
-       
     }
     public class GeoLineString
-        {
+    {
             [JsonProperty("type")]
             public string type { get; set; }
 
             [JsonProperty("coordinates")]
             public float[][] coordinates { get; set; }
-        }
+    }
 }
