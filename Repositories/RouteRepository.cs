@@ -13,13 +13,13 @@ namespace project10.Repositories
 
     public class RouteRepository
     {
-        private NpgsqlConnection _connect;
+        private string strConnect;
 
         //static string routePath = @"C:\ARINA\WORK\project10\data\route.json";
 
-        public RouteRepository(NpgsqlConnection connect)
+        public RouteRepository(string strConnect)
         {
-            this._connect = connect;
+            this.strConnect = strConnect;
         }
 
 
