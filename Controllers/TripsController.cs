@@ -19,7 +19,7 @@ namespace project10.Controllers
 
     public TripsController(IConfiguration configuration) : base(configuration)
     {
-      _tripsRepository = new Repositories.TripsRepository(this.connect);
+      _tripsRepository = new Repositories.TripsRepository(this.strConnect);
     }
 
     [HttpGet()]

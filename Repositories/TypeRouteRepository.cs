@@ -23,108 +23,146 @@ namespace project10.Repositories
         
         public JArray List()
         {
-            JArray result = new JArray();
+            var connect = new NpgsqlConnection(this.strConnect);
 
-            var query = "select id, name from public.typeroutes order by id ASC";
-
-            using (var cmd = new NpgsqlCommand(query, this._connect))
+            try
             {
-                NpgsqlDataReader reader = cmd.ExecuteReader();
+                connect.Open();
+                JArray result = new JArray();
 
-                while (reader.Read())
+                var query = "select id, name from public.typeroutes order by id ASC";
+
+                using (var cmd = new NpgsqlCommand(query, connect))
                 {
-                    TypeRoute tr = new TypeRoute();
+                    NpgsqlDataReader reader = cmd.ExecuteReader();
 
-                    tr.Id = reader.GetInt32(0);
-                    tr.Name = reader.GetString(1);
-
-
-                    result.Add((JObject)JToken.FromObject(tr));
-                }
-
-                reader.Close();
-
-            }
-
-            return result;
-        }
-    
-
-         public JToken Show(int id)
-        {
-
-            JArray result = new JArray();
-
-            var query = "select id, name from public.typeroutes where id=@p1";
-
-            using (var cmd = new NpgsqlCommand(query, this._connect))
-            {
-
-                NpgsqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    TypeRoute tr = new TypeRoute();
+                    while (reader.Read())
+                    {
+                        TypeRoute tr = new TypeRoute();
 
                         tr.Id = reader.GetInt32(0);
                         tr.Name = reader.GetString(1);
-                        tr.Icon = reader.GetString(2);
+
                         result.Add((JObject)JToken.FromObject(tr));
-                    
+                    }
+                    reader.Close();
                 }
-                reader.Close();
+                return result;
             }
+            finally
+            {
+                connect.Close(); 
+            }
+        }
+    
 
-         return result;
+        public JToken Show(int id)
+        {
+            var connect = new NpgsqlConnection(this.strConnect);
 
+            try
+            {
+                connect.Open();
+                JArray result = new JArray();
+
+                var query = "select id, name from public.typeroutes where id=@p1";
+
+                using (var cmd = new NpgsqlCommand(query, connect))
+                {
+
+                    NpgsqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        TypeRoute tr = new TypeRoute();
+
+                            tr.Id = reader.GetInt32(0);
+                            tr.Name = reader.GetString(1);
+                            tr.Icon = reader.GetString(2);
+                            result.Add((JObject)JToken.FromObject(tr));
+                        
+                    }
+                    reader.Close();
+                }
+
+            return result;
+            }
+            finally
+            {
+                connect.Close(); 
+            }
         }
 
         public void Create(TypeRoute tr)
         {
-            var query = "insert into public.typeroutes (name, color, icon, about) values (@p1, @p2, @p3, @p4)";
-            
-            using (var cmd = new NpgsqlCommand(query, this._connect))
+            var connect = new NpgsqlConnection(this.strConnect);
+            try
             {
-                cmd.Parameters.AddWithValue("p1", tr.Name);
-                cmd.Parameters.AddWithValue("p2", tr.Color);
-                cmd.Parameters.AddWithValue("p3", "tr.Icon");
-                cmd.Parameters.AddWithValue("p4", tr.About);
-                cmd.ExecuteNonQuery();
+                connect.Open();
+                var query = "insert into public.typeroutes (name, color, icon, about) values (@p1, @p2, @p3, @p4)";
                 
+                using (var cmd = new NpgsqlCommand(query, connect))
+                {
+                    cmd.Parameters.AddWithValue("p1", tr.Name);
+                    cmd.Parameters.AddWithValue("p2", tr.Color);
+                    cmd.Parameters.AddWithValue("p3", "tr.Icon");
+                    cmd.Parameters.AddWithValue("p4", tr.About);
+                    cmd.ExecuteNonQuery();
+                    
+                }
             }
-
+            finally
+            {
+                connect.Close(); 
+            }
         }
 
         public void Delete(int id)
         {
-            var query = "delete from public.typeroutes where id = @p1";
-
-               using (var cmd = new NpgsqlCommand(query, this._connect))
+            var connect = new NpgsqlConnection(this.strConnect);
+            try
             {
-                cmd.Parameters.AddWithValue("p1", NpgsqlTypes.NpgsqlDbType.Integer, id);
-                cmd.ExecuteNonQuery();               
+                connect.Open();
+                var query = "delete from public.typeroutes where id = @p1";
+
+                using (var cmd = new NpgsqlCommand(query, connect))
+                {
+                    cmd.Parameters.AddWithValue("p1", NpgsqlTypes.NpgsqlDbType.Integer, id);
+                    cmd.ExecuteNonQuery();               
+                }
+            }
+            finally
+            {
+                connect.Close(); 
             }
         }
 
         
         public void Update(int id, TypeRoute tr)
         { 
-            
-            var query = @"update public.typeroutes
-             set name = @p2, icon = @p3, color = @p4, about = @p5
-             where id=@p1";
-
-            using (var cmd = new NpgsqlCommand(query, this._connect))
+            var connect = new NpgsqlConnection(this.strConnect);
+            try
             {
-                cmd.Parameters.AddWithValue("p1", tr.Id);
-                cmd.Parameters.AddWithValue("p2", tr.Name);
-                cmd.Parameters.AddWithValue("p3", "tr.Icon");
-                cmd.Parameters.AddWithValue("p4", tr.Color);
-                cmd.Parameters.AddWithValue("p5", tr.About);
-                cmd.ExecuteNonQuery();              
+                connect.Open();
+                var query = @"update public.typeroutes
+                set name = @p2, icon = @p3, color = @p4, about = @p5
+                where id=@p1";
+
+                using (var cmd = new NpgsqlCommand(query, connect))
+                {
+                    cmd.Parameters.AddWithValue("p1", tr.Id);
+                    cmd.Parameters.AddWithValue("p2", tr.Name);
+                    cmd.Parameters.AddWithValue("p3", "tr.Icon");
+                    cmd.Parameters.AddWithValue("p4", tr.Color);
+                    cmd.Parameters.AddWithValue("p5", tr.About);
+                    cmd.ExecuteNonQuery();              
+                }
+            }
+            finally
+            {
+                connect.Close(); 
             }
         }
-
     }
 }
 

@@ -21,7 +21,7 @@ namespace project10.Controllers
     private FavouritePlaceRepository _fpRepository;
     public FavouritePlacecontroller(IConfiguration configuration) : base(configuration)
     {
-      _fpRepository = new Repositories.FavouritePlaceRepository(this.connect);
+      _fpRepository = new Repositories.FavouritePlaceRepository(this.strConnect);
     }
 
     [HttpPost]

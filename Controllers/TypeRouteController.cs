@@ -23,7 +23,7 @@ namespace project10.Controllers
 
         public TypeRouteController(IConfiguration configuration) : base(configuration)
         {
-            _typeRouteRepository = new Repositories.TypeRouteRepository(this.connect);
+            _typeRouteRepository = new Repositories.TypeRouteRepository(this.strConnect);
         }
 
         [HttpGet]

@@ -22,7 +22,7 @@ namespace project10.Controllers
         private RouteRepository _routeRepository;
         public RouteController(IConfiguration configuration) : base(configuration)
         {
-            _routeRepository = new Repositories.RouteRepository(this.connect);
+            _routeRepository = new Repositories.RouteRepository(this.strConnect);
         }
 
 
