@@ -10,11 +10,11 @@ namespace project10.Repositories
     public class FavouritePlaceRepository
     {
         //static string favouritePlacePath = @"C:\ARINA\WORK\project10\data\favouriteplace.json";
-        private NpgsqlConnection _connect;
+        private string strConnect;
 
-        public FavouritePlaceRepository(NpgsqlConnection connect)
+        public FavouritePlaceRepository(string strConnect)
         {
-            this._connect = connect;
+            this.strConnect = strConnect;
         }
 
        public void Create(FavouritePlace fp)
@@ -55,30 +55,42 @@ namespace project10.Repositories
 
         public JArray List(int user_id)
         {
-            JArray result = new JArray();
+            var connect = new NpgsqlConnection(this.strConnect);
 
-            var query = "select id, name, about, ST_AsGeoJSON(geom) from public.favouriteplaces where user_id=@p1";
+            try
+            {       
+                connect.Open();
 
-            using (var cmd = new NpgsqlCommand(query, this._connect))
-            {
-                cmd.Parameters.AddWithValue("p1", user_id);
-                NpgsqlDataReader reader = cmd.ExecuteReader();
+                JArray result = new JArray();
 
-                while (reader.Read())
+                var query = "select id, name, about, ST_AsGeoJSON(geom) from public.favouriteplaces where user_id=@p1";
+
+                using (var cmd = new NpgsqlCommand(query, connect))
                 {
-                    FavouritePlace tr = new FavouritePlace();
+                    cmd.Parameters.AddWithValue("p1", user_id);
+                    NpgsqlDataReader reader = cmd.ExecuteReader();
 
-                    tr.id = reader.GetInt32(0);
-                    tr.name = reader.GetString(1);
-                    tr.about = reader.GetString(2);                    
-                    tr.point = JsonSerializer.Deserialize<GeoPoint>(reader.GetString(3));
+                    while (reader.Read())
+                    {
+                        FavouritePlace tr = new FavouritePlace();
 
-                    result.Add((JObject)JToken.FromObject(tr));
+                        tr.id = reader.GetInt32(0);
+                        tr.name = reader.GetString(1);
+                        tr.about = reader.GetString(2);                    
+                        tr.point = JsonSerializer.Deserialize<GeoPoint>(reader.GetString(3));
+
+                        result.Add((JObject)JToken.FromObject(tr));
+                    }
+
+                    reader.Close();
                 }
-
-                reader.Close();
+                return result;
             }
-            return result;
+            finally
+            {
+                Console.WriteLine("#######");
+               connect.Close(); 
+            }
         }
 
         public JToken Show(int id)
